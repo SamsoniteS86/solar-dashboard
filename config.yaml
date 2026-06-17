@@ -1,0 +1,34 @@
+name: Solar Dashboard
+version: "1.0.0"
+slug: solar-dashboard
+description: "Sungrow SH15T Solar Monitoring PWA mit Modbus TCP"
+url: "https://github.com/sknoche/solar-dashboard"
+arch:
+  - aarch64
+  - amd64
+  - armv7
+host_network: true
+port: 3000
+port_description: "Web UI"
+ports:
+  "3000/tcp": 3000
+ports_description:
+  "3000/tcp": "Solar Dashboard Web UI"
+ingress: true
+ingress_port: 3000
+panel_icon: "mdi:solar-power"
+panel_title: "Solar"
+options:
+  inverter_ip: "192.168.178.137"
+  inverter_port: 502
+  ihome_ip: "192.168.178.138"
+  ihome_port: 502
+  demo_mode: false
+schema:
+  inverter_ip: str
+  inverter_port: port
+  ihome_ip: str
+  ihome_port: port
+  demo_mode: bool
+startup: application
+boot: auto

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#080c18">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Solar">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <title>Solar Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="scene">
+    <div class="bg-glow"></div>
+    <div class="dashboard">
+      <div class="title-label">Home Power</div>
+      <div class="yield-box">
+        <div class="yield-label">Daily Yield</div>
+        <div class="yield-value" id="daily-yield">42.3</div>
+        <div class="yield-unit">kWh</div>
+      </div>
+      <!-- PV Solar - Top -->
+      <div class="energy-node pv-node" id="pv-node">
+        <div class="node-glow pv-glow"></div>
+        <div class="node-card">
+          <div class="node-visual">
+            <div class="panel-3d">
+              <div class="panel-face panel-top"></div>
+              <div class="panel-face panel-front"></div>
+              <div class="panel-face panel-right"></div>
+              <div class="panel-cells">
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              </div>
+              <div class="panel-shine"></div>
+            </div>
+            <div class="sun-effect" id="sun-effect">
+              <div class="sun-ray"></div>
+              <div class="sun-ray"></div>
+              <div class="sun-ray"></div>
+            </div>
+          </div>
+          <div class="node-info">
+            <span class="node-label">Photovoltaik</span>
+            <span class="node-value" id="pv-power">8.45</span>
+            <span class="node-unit">kW</span>
+            <span class="node-sub" id="pv-daily">42.3 kWh heute</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Hub = Home -->
+      <div class="center-hub" id="center-hub">
+        <div class="hub-ring hub-ring-1"></div>
+        <div class="hub-ring hub-ring-2"></div>
+        <div class="hub-ring hub-ring-3"></div>
+        <div class="hub-core">
+          <div class="hub-home-visual">
+            <svg viewBox="0 0 50 50" class="hub-house-icon">
+              <path d="M25 5 L45 22 L45 45 L5 45 L5 22 Z"
+                    fill="rgba(0, 20, 40, 0.5)" stroke="var(--cyan)" stroke-width="1.2"/>
+              <path d="M25 5 L3 22 L47 22 Z"
+                    fill="none" stroke="var(--cyan)" stroke-width="1.2"/>
+              <rect x="13" y="26" width="8" height="7" rx="1"
+                    fill="rgba(0, 229, 255, 0.12)" stroke="rgba(0, 229, 255, 0.5)" stroke-width="0.8"/>
+              <rect x="29" y="26" width="8" height="7" rx="1"
+                    fill="rgba(0, 229, 255, 0.12)" stroke="rgba(0, 229, 255, 0.5)" stroke-width="0.8"/>
+              <rect x="20" y="34" width="10" height="11" rx="1"
+                    fill="rgba(0, 229, 255, 0.08)" stroke="rgba(0, 229, 255, 0.4)" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <div class="hub-power" id="hub-power">
+            <span class="hub-value" id="home-power">---</span>
+            <span class="hub-unit">W</span>
+            <span class="hub-label">Verbrauch</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Battery - Left -->
+      <div class="energy-node battery-node" id="battery-node">
+        <div class="node-glow battery-glow"></div>
+        <div class="node-card">
+          <div class="node-visual">
+            <div class="battery-3d">
+              <div class="battery-body">
+                <div class="battery-terminal"></div>
+                <div class="battery-shell">
+                  <div class="battery-level" id="battery-level"></div>
+                  <div class="battery-segments">
+                    <div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+                  </div>
+                </div>
+                <div class="battery-reflection"></div>
+              </div>
+            </div>
+          </div>
+          <div class="node-info">
+            <span class="node-label">Batterie</span>
+            <span class="node-value" id="battery-power">2.20</span>
+            <span class="node-unit">kW</span>
+            <div class="soc-display">
+              <div class="soc-ring">
+                <svg viewBox="0 0 60 60">
+                  <circle class="soc-bg" cx="30" cy="30" r="26"/>
+                  <circle class="soc-progress" id="soc-circle" cx="30" cy="30" r="26"/>
+                </svg>
+                <span class="soc-text" id="battery-soc">--%</span>
+              </div>
+            </div>
+            <span class="node-sub" id="battery-status-text">Laden</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid - Top Right -->
+      <div class="energy-node grid-node" id="grid-node">
+        <div class="node-glow grid-glow"></div>
+        <div class="node-card">
+          <div class="node-visual">
+            <div class="grid-3d">
+              <div class="pylon">
+                <div class="pylon-body"></div>
+                <div class="pylon-arm pylon-arm-top"></div>
+                <div class="pylon-arm pylon-arm-bottom"></div>
+                <div class="pylon-wire pylon-wire-1"></div>
+                <div class="pylon-wire pylon-wire-2"></div>
+              </div>
+              <div class="grid-pulse" id="grid-pulse"></div>
+            </div>
+          </div>
+          <div class="node-info">
+            <span class="node-label">Stromnetz</span>
+            <span class="node-value" id="grid-power">1.20</span>
+            <span class="node-unit">kW</span>
+            <span class="node-sub" id="grid-status-text">Einspeisung</span>
+            <span class="node-sub" id="grid-daily">Exp: 12.8 kWh | Imp: 3.1 kWh</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Wallbox - Bottom -->
+      <div class="energy-node wallbox-node" id="wallbox-node">
+        <div class="node-glow wallbox-glow"></div>
+        <div class="node-card">
+          <div class="node-visual">
+            <div class="car-3d">
+              <svg class="car-icon" viewBox="0 0 80 50">
+                <!-- Car body -->
+                <path d="M12 32 L16 20 Q18 16 22 16 L58 16 Q62 16 64 20 L68 32"
+                      fill="rgba(0, 20, 40, 0.5)" stroke="var(--cyan)" stroke-width="1.2"/>
+                <!-- Car roof -->
+                <path d="M24 16 L30 6 Q32 4 34 4 L46 4 Q48 4 50 6 L56 16"
+                      fill="rgba(0, 20, 40, 0.4)" stroke="var(--cyan)" stroke-width="1"/>
+                <!-- Windows -->
+                <path d="M28 15 L32 7 Q33 5.5 35 5.5 L39 5.5 L39 15 Z"
+                      fill="rgba(0, 229, 255, 0.12)" stroke="rgba(0, 229, 255, 0.4)" stroke-width="0.7"/>
+                <path d="M41 5.5 L45 5.5 Q47 5.5 48 7 L52 15 L41 15 Z"
+                      fill="rgba(0, 229, 255, 0.12)" stroke="rgba(0, 229, 255, 0.4)" stroke-width="0.7"/>
+                <!-- Lower body -->
+                <rect x="10" y="32" width="60" height="10" rx="3"
+                      fill="rgba(0, 20, 40, 0.6)" stroke="var(--cyan)" stroke-width="1"/>
+                <!-- Wheels -->
+                <circle cx="24" cy="42" r="6" fill="rgba(0, 12, 24, 0.8)" stroke="var(--cyan)" stroke-width="1.2"/>
+                <circle cx="24" cy="42" r="3" fill="none" stroke="rgba(0, 229, 255, 0.4)" stroke-width="0.7"/>
+                <circle cx="56" cy="42" r="6" fill="rgba(0, 12, 24, 0.8)" stroke="var(--cyan)" stroke-width="1.2"/>
+                <circle cx="56" cy="42" r="3" fill="none" stroke="rgba(0, 229, 255, 0.4)" stroke-width="0.7"/>
+                <!-- Headlights -->
+                <rect x="65" y="34" width="4" height="3" rx="1" fill="rgba(0, 229, 255, 0.5)"/>
+                <rect x="11" y="34" width="4" height="3" rx="1" fill="rgba(0, 229, 255, 0.5)"/>
+                <!-- Charge port glow -->
+                <circle cx="18" cy="22" r="2.5" fill="none" stroke="var(--cyan)" stroke-width="1" id="car-charge-port">
+                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <!-- Lightning bolt on charge port -->
+                <path d="M17.5 20.5 L18.5 22 L17 22 L18 23.5" fill="none" stroke="var(--cyan)" stroke-width="0.6"/>
+              </svg>
+            </div>
+          </div>
+          <div class="node-info">
+            <span class="node-label">Wallbox</span>
+            <span class="node-value" id="wallbox-power">3.70</span>
+            <span class="node-unit">kW</span>
+            <span class="node-sub" id="wallbox-session">18.5 kWh Session</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Energy Flow Canvas -->
+      <canvas id="flow-canvas"></canvas>
+    </div>
+  </div>
+  <!-- Chart Modal -->
+  <div class="chart-modal" id="chart-modal">
+    <div class="chart-modal-backdrop" id="chart-backdrop"></div>
+    <div class="chart-modal-content">
+      <div class="chart-header">
+        <h2 id="chart-title">Tagesverlauf</h2>
+        <button class="chart-close" id="chart-close">&times;</button>
+      </div>
+      <div class="chart-body">
+        <canvas id="chart-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+</body>
+</html>

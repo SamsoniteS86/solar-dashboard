@@ -1,0 +1,1062 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #080c18;
+  --cyan: #00e5ff;
+  --cyan-dim: rgba(0, 229, 255, 0.6);
+  --cyan-glow: rgba(0, 229, 255, 0.3);
+  --cyan-faint: rgba(0, 229, 255, 0.08);
+  --green: #00ff88;
+  --green-glow: rgba(0, 255, 136, 0.3);
+  --orange: #ff8c00;
+  --orange-glow: rgba(255, 140, 0, 0.3);
+  --red: #ff3d5a;
+  --red-glow: rgba(255, 61, 90, 0.3);
+  --blue: #4d8dff;
+  --blue-glow: rgba(77, 141, 255, 0.3);
+  --text: #c8e6f0;
+  --text-bright: #ffffff;
+  --text-dim: #5a8a9a;
+  --platform: rgba(0, 229, 255, 0.03);
+  --platform-border: rgba(0, 229, 255, 0.15);
+}
+
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Background grid + gradient */
+.scene {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(0, 229, 255, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(0, 100, 200, 0.06) 0%, transparent 40%),
+    var(--bg);
+}
+
+/* Animated grid background */
+.scene::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  perspective: 800px;
+  transform: perspective(600px) rotateX(30deg) translateY(20%);
+  transform-origin: center bottom;
+  mask-image: linear-gradient(to top, black 20%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to top, black 20%, transparent 80%);
+}
+
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 25% 45%, rgba(0, 229, 255, 0.04) 0%, transparent 30%),
+    radial-gradient(circle at 75% 35%, rgba(0, 229, 255, 0.03) 0%, transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(0, 100, 180, 0.04) 0%, transparent 30%);
+}
+
+/* Platform base */
+.dashboard {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard::after {
+  content: '';
+  position: absolute;
+  bottom: 8%;
+  left: 10%;
+  right: 10%;
+  height: 45%;
+  background: var(--platform);
+  border: 1px solid var(--platform-border);
+  border-radius: 8px;
+  transform: perspective(800px) rotateX(50deg);
+  box-shadow:
+    0 0 30px rgba(0, 229, 255, 0.05),
+    inset 0 0 60px rgba(0, 229, 255, 0.02);
+  pointer-events: none;
+}
+
+#flow-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Center Hub */
+.center-hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 180px;
+  z-index: 10;
+}
+
+.hub-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.hub-ring-1 {
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  animation: hubRotate 25s linear infinite;
+}
+
+.hub-ring-2 {
+  inset: 12px;
+  border: 1px dashed rgba(0, 229, 255, 0.15);
+  animation: hubRotate 18s linear infinite reverse;
+}
+
+.hub-ring-3 {
+  inset: 24px;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.1), inset 0 0 8px rgba(0, 229, 255, 0.05);
+  animation: hubRotate 12s linear infinite;
+}
+
+@keyframes hubRotate {
+  to { transform: rotate(360deg); }
+}
+
+.hub-core {
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  background: rgba(8, 12, 24, 0.9);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow:
+    0 0 20px rgba(0, 229, 255, 0.1),
+    inset 0 0 15px rgba(0, 229, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.hub-home-visual {
+  width: 45px;
+  height: 45px;
+}
+
+.hub-house-icon {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 4px var(--cyan-glow));
+}
+
+.hub-power {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hub-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.hub-unit {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.hub-label {
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Energy Nodes */
+.energy-node {
+  position: absolute;
+  z-index: 6;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.energy-node:hover {
+  z-index: 20;
+  filter: brightness(1.2);
+}
+
+.pv-node {
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.pv-node:hover { transform: translateX(-50%) scale(1.05); }
+
+.battery-node {
+  left: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.battery-node:hover { transform: translateY(-50%) scale(1.05); }
+
+.grid-node {
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.grid-node:hover { transform: translateY(-50%) scale(1.05); }
+
+.wallbox-node {
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.wallbox-node:hover { transform: translateX(-50%) scale(1.05); }
+
+/* Glass Card */
+.node-card {
+  background: rgba(8, 20, 40, 0.6);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  border-radius: 16px;
+  padding: 1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 20px rgba(0, 229, 255, 0.05),
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glass shine effect */
+.node-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.04) 0%, transparent 100%);
+  border-radius: 16px 16px 0 0;
+  pointer-events: none;
+}
+
+.node-card::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.4), transparent);
+  pointer-events: none;
+}
+
+/* Node Glow */
+.node-glow {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.2;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--cyan);
+}
+
+/* Node Info */
+.node-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 80px;
+}
+
+.node-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--cyan-dim);
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.node-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text-bright);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+.node-unit {
+  font-size: 0.7rem;
+  color: var(--cyan-dim);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+.node-sub {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Node Visual */
+.node-visual {
+  width: 70px;
+  height: 70px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ===== 3D HOLOGRAPHIC SOLAR PANEL ===== */
+.panel-3d {
+  width: 60px;
+  height: 42px;
+  position: relative;
+  transform: perspective(200px) rotateX(20deg) rotateY(-10deg);
+  transform-style: preserve-3d;
+}
+
+.panel-face { position: absolute; }
+
+.panel-top {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 30, 60, 0.8);
+  border: 1px solid var(--cyan);
+  border-radius: 2px;
+  box-shadow:
+    0 0 8px var(--cyan-glow),
+    inset 0 0 15px rgba(0, 229, 255, 0.05);
+}
+
+.panel-front {
+  bottom: -5px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: 5px;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-top: none;
+  transform: rotateX(-60deg);
+  transform-origin: top;
+}
+
+.panel-right {
+  right: -4px;
+  top: 2px;
+  width: 4px;
+  height: calc(100% - 4px);
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-left: none;
+  transform: rotateY(60deg);
+  transform-origin: left;
+}
+
+.panel-cells {
+  position: absolute;
+  inset: 4px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+}
+
+.panel-cells .cell {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 1px;
+}
+
+.panel-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, transparent 50%);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.sun-effect {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 28px;
+  height: 28px;
+}
+
+.sun-ray {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--cyan), transparent 70%);
+  animation: sunPulse 2.5s ease-in-out infinite;
+}
+
+.sun-ray:nth-child(2) { animation-delay: 0.7s; transform: scale(0.6); }
+.sun-ray:nth-child(3) { animation-delay: 1.4s; transform: scale(0.4); }
+
+@keyframes sunPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.5); }
+}
+
+/* ===== 3D HOLOGRAPHIC BATTERY ===== */
+.battery-3d { perspective: 200px; }
+
+.battery-body {
+  width: 35px;
+  height: 55px;
+  position: relative;
+  transform: rotateX(5deg) rotateY(-8deg);
+  transform-style: preserve-3d;
+}
+
+.battery-terminal {
+  width: 14px;
+  height: 5px;
+  background: rgba(0, 229, 255, 0.2);
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+  margin: 0 auto;
+}
+
+.battery-shell {
+  width: 100%;
+  height: 48px;
+  background: rgba(0, 20, 40, 0.7);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 12px rgba(0, 229, 255, 0.1),
+    inset 0 0 10px rgba(0, 229, 255, 0.03);
+}
+
+.battery-level {
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  right: 3px;
+  height: 70%;
+  background: linear-gradient(to top, rgba(0, 255, 136, 0.6), rgba(0, 229, 255, 0.4));
+  border-radius: 2px;
+  box-shadow: 0 0 12px var(--green-glow);
+  transition: height 1s ease;
+}
+
+.battery-segments {
+  position: absolute;
+  inset: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  pointer-events: none;
+}
+
+.battery-segments .seg {
+  flex: 1;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+}
+
+.battery-reflection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.06), transparent);
+  border-radius: 4px 0 0 4px;
+  pointer-events: none;
+}
+
+/* SOC Ring */
+.soc-display { margin: 5px 0 2px; }
+
+.soc-ring {
+  position: relative;
+  width: 46px;
+  height: 46px;
+}
+
+.soc-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.soc-bg {
+  fill: none;
+  stroke: rgba(0, 229, 255, 0.1);
+  stroke-width: 3;
+}
+
+.soc-progress {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 163.36;
+  stroke-dashoffset: 45;
+  transition: stroke-dashoffset 1s ease;
+  filter: drop-shadow(0 0 4px var(--green-glow));
+}
+
+.soc-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--green);
+  text-shadow: 0 0 5px var(--green-glow);
+}
+
+/* ===== 3D HOLOGRAPHIC GRID PYLON ===== */
+.grid-3d {
+  position: relative;
+  width: 50px;
+  height: 65px;
+  perspective: 200px;
+}
+
+.pylon {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: rotateX(5deg);
+}
+
+.pylon-body {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: 4px;
+  height: 48px;
+  margin-left: -2px;
+  background: rgba(0, 229, 255, 0.15);
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.2);
+}
+
+.pylon-arm {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 3px;
+  background: rgba(0, 229, 255, 0.12);
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  box-shadow: 0 0 4px rgba(0, 229, 255, 0.2);
+}
+
+.pylon-arm-top { top: 10px; width: 40px; }
+.pylon-arm-bottom { top: 24px; width: 30px; }
+
+.pylon-wire {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--cyan-dim) 20%, var(--cyan-dim) 80%, transparent 95%);
+  box-shadow: 0 0 3px var(--cyan-glow);
+}
+
+.pylon-wire-1 { top: 11px; }
+.pylon-wire-2 { top: 25px; }
+
+.grid-pulse {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow);
+  animation: gridPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.5; box-shadow: 0 0 5px var(--cyan-glow); }
+  50% { opacity: 1; box-shadow: 0 0 15px var(--cyan-glow), 0 0 30px var(--cyan-glow); }
+}
+
+/* ===== 3D HOLOGRAPHIC HOUSE ===== */
+.home-3d { perspective: 200px; }
+
+.house {
+  width: 60px;
+  height: 55px;
+  position: relative;
+  transform: rotateX(5deg) rotateY(5deg);
+  transform-style: preserve-3d;
+}
+
+.house-roof {
+  width: 0;
+  height: 0;
+  border-left: 33px solid transparent;
+  border-right: 33px solid transparent;
+  border-bottom: 20px solid rgba(0, 229, 255, 0.12);
+  margin: 0 auto;
+  position: relative;
+  filter: drop-shadow(0 0 4px var(--cyan-glow));
+}
+
+.house-roof::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: -28px;
+  width: 56px;
+  height: 16px;
+  border-left: 28px solid transparent;
+  border-right: 28px solid transparent;
+  border-bottom: 16px solid transparent;
+  border-bottom-color: rgba(0, 229, 255, 0.3);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.house-roof::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: -33px;
+  width: 66px;
+  height: 20px;
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  border-top: none;
+  background: none;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.house-body {
+  width: 52px;
+  height: 30px;
+  margin: 0 auto;
+  background: rgba(0, 20, 40, 0.5);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  border-top: none;
+  position: relative;
+  box-shadow:
+    0 0 10px rgba(0, 229, 255, 0.08),
+    inset 0 0 15px rgba(0, 229, 255, 0.03);
+}
+
+.house-window {
+  width: 10px;
+  height: 10px;
+  background: rgba(0, 229, 255, 0.15);
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  position: absolute;
+  top: 6px;
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.2), inset 0 0 4px rgba(0, 229, 255, 0.1);
+}
+
+.house-window:nth-child(1) { left: 6px; }
+.house-window:nth-child(2) { right: 6px; }
+
+.house-door {
+  width: 10px;
+  height: 16px;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  border-bottom: none;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px 2px 0 0;
+}
+
+.house-glow-windows {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ===== 3D HOLOGRAPHIC CAR (WALLBOX) ===== */
+.car-3d {
+  perspective: 200px;
+}
+
+.car-icon {
+  width: 70px;
+  height: 44px;
+  transform: rotateX(5deg) rotateY(-5deg);
+  filter: drop-shadow(0 0 6px var(--cyan-glow));
+}
+
+/* ===== 3D HOLOGRAPHIC WALLBOX ===== */
+.wallbox-3d { perspective: 200px; }
+
+.charger {
+  width: 38px;
+  position: relative;
+  transform: rotateX(3deg) rotateY(-5deg);
+}
+
+.charger-body {
+  width: 34px;
+  height: 50px;
+  margin: 0 auto;
+  background: rgba(0, 20, 40, 0.7);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  border-radius: 6px;
+  box-shadow:
+    0 0 12px rgba(0, 229, 255, 0.08),
+    inset 0 0 10px rgba(0, 229, 255, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.charger-screen {
+  width: 22px;
+  height: 12px;
+  margin: 5px auto 0;
+  background: rgba(0, 12, 24, 0.8);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 2px;
+  box-shadow: inset 0 0 6px rgba(0, 229, 255, 0.1);
+}
+
+.charger-led {
+  width: 14px;
+  height: 14px;
+  margin: 6px auto;
+  border-radius: 50%;
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-glow), 0 0 16px var(--cyan-glow), inset 0 0 4px var(--cyan-glow);
+  animation: ledBreath 1.5s ease-in-out infinite;
+}
+
+@keyframes ledBreath {
+  0%, 100% { box-shadow: 0 0 5px var(--cyan-glow), inset 0 0 3px var(--cyan-glow); }
+  50% { box-shadow: 0 0 12px var(--cyan-glow), 0 0 24px var(--cyan-glow), inset 0 0 6px var(--cyan-glow); }
+}
+
+.charger-plug {
+  width: 10px;
+  height: 5px;
+  margin: 0 auto;
+  background: rgba(0, 229, 255, 0.15);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  border-radius: 2px;
+}
+
+.charger-cable {
+  width: 2px;
+  height: 14px;
+  margin: 2px auto 0;
+  background: rgba(0, 229, 255, 0.3);
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 0 4px rgba(0, 229, 255, 0.2);
+}
+
+/* Title label */
+.title-label {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  padding: 6px 20px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan-glow);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+  z-index: 20;
+}
+
+/* Daily yield box */
+.yield-box {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  padding: 10px 18px;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.08);
+  z-index: 20;
+}
+
+.yield-box .yield-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.yield-box .yield-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan-glow);
+}
+
+.yield-box .yield-unit {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+/* Clickable nodes */
+.pv-node .node-card,
+.grid-node .node-card,
+.center-hub {
+  cursor: pointer;
+}
+
+/* Chart Modal */
+.chart-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-modal.active {
+  display: flex;
+}
+
+.chart-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 12, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.chart-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 900px;
+  max-height: 85vh;
+  background: rgba(10, 18, 35, 0.95);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  box-shadow:
+    0 0 40px rgba(0, 229, 255, 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+.chart-modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.03) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: 20px 20px 0 0;
+}
+
+.chart-modal-content::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.5), transparent);
+  pointer-events: none;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+
+.chart-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan-glow);
+  letter-spacing: 0.03em;
+}
+
+.chart-close {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  color: var(--cyan);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.chart-close:hover {
+  background: rgba(0, 229, 255, 0.15);
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.chart-body {
+  position: relative;
+  height: 350px;
+}
+
+.chart-body canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .pv-node { top: 5%; left: 5%; }
+  .battery-node { left: 5%; bottom: 10%; }
+  .grid-node { right: 5%; top: 8%; }
+  .home-node { top: 5%; }
+  .wallbox-node { right: 5%; bottom: 10%; }
+}
+
+@media (max-width: 800px) {
+  .scene { overflow: hidden; }
+  .dashboard { height: 100vh; }
+  .dashboard::after { display: none; }
+
+  .title-label {
+    top: 10px;
+    font-size: 0.6rem;
+    padding: 4px 12px;
+  }
+
+  .yield-box {
+    bottom: 10px;
+    right: 10px;
+    padding: 6px 12px;
+  }
+  .yield-box .yield-value { font-size: 1rem; }
+
+  .center-hub {
+    width: 120px;
+    height: 120px;
+  }
+  .hub-core { inset: 16px; }
+  .hub-home-visual { width: 30px; height: 30px; }
+  .hub-value { font-size: 1rem; }
+  .hub-unit { font-size: 0.55rem; }
+  .hub-label { font-size: 0.5rem; }
+
+  .energy-node { position: absolute !important; }
+
+  .pv-node {
+    top: 5% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  .battery-node {
+    left: 3% !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+  .grid-node {
+    right: 3% !important;
+    top: 50% !important;
+    left: auto !important;
+    transform: translateY(-50%) !important;
+  }
+  .wallbox-node {
+    bottom: 5% !important;
+    top: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .node-card {
+    padding: 0.6rem 0.8rem;
+    gap: 0.5rem;
+    border-radius: 12px;
+  }
+
+  .node-visual {
+    width: 40px;
+    height: 40px;
+  }
+
+  .panel-3d { width: 35px; height: 25px; }
+  .battery-body { width: 22px; height: 35px; }
+  .battery-shell { height: 30px; }
+  .battery-terminal { width: 10px; height: 4px; }
+  .grid-3d { width: 30px; height: 40px; }
+  .car-icon { width: 44px; height: 28px; }
+  .charger { width: 24px; }
+  .charger-body { width: 22px; height: 32px; }
+
+  .node-value { font-size: 1.1rem; }
+  .node-label { font-size: 0.55rem; }
+  .node-unit { font-size: 0.6rem; }
+  .node-sub { font-size: 0.55rem; }
+
+  .soc-display { margin: 3px 0 1px; }
+  .soc-ring { width: 32px; height: 32px; }
+  .soc-text { font-size: 0.6rem; }
+
+  .node-glow { width: 100px; height: 100px; }
+
+  .sun-effect { width: 16px; height: 16px; top: -5px; right: -5px; }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "solar-dashboard",
+  "version": "1.0.0",
+  "description": "Sungrow SH15T Solar Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "modbus-serial": "^8.0.16"
+  }
+}

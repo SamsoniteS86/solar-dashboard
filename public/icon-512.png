@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#080c18"/>
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#00e5ff" stroke-width="4" opacity="0.3"/>
+  <circle cx="256" cy="256" r="140" fill="none" stroke="#00e5ff" stroke-width="2" opacity="0.2"/>
+  <!-- Sun/Solar symbol -->
+  <circle cx="256" cy="200" r="40" fill="none" stroke="#00e5ff" stroke-width="6"/>
+  <line x1="256" y1="148" x2="256" y2="132" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="256" y1="252" x2="256" y2="268" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="204" y1="200" x2="188" y2="200" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="308" y1="200" x2="324" y2="200" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="219" y1="163" x2="208" y2="152" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="293" y1="237" x2="304" y2="248" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="293" y1="163" x2="304" y2="152" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="219" y1="237" x2="208" y2="248" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <!-- House -->
+  <path d="M200 320 L256 280 L312 320 L312 380 L200 380 Z" fill="none" stroke="#00e5ff" stroke-width="5"/>
+  <rect x="240" y="345" width="32" height="35" rx="2" fill="none" stroke="#00e5ff" stroke-width="4"/>
+  <!-- Lightning bolt -->
+  <path d="M252 290 L248 310 L258 310 L254 330" fill="none" stroke="#00ff88" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
