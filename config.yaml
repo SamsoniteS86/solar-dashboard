@@ -1,5 +1,5 @@
 name: Solar Dashboard
-version: "1.0.0"
+version: "1.0.1"
 slug: solar-dashboard
 description: "Sungrow SH15T Solar Monitoring PWA mit Modbus TCP"
 url: "https://github.com/sknoche/solar-dashboard"
