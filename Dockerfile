@@ -1,7 +1,7 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-RUN apk add --no-cache nodejs npm
+RUN apk add --no-cache nodejs npm jq bash
 
 WORKDIR /app
 
